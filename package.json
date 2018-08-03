@@ -1,0 +1,24 @@
+{
+  "name": "xbeelocalization",
+  "version": "1.0.0",
+  "description": "xbeelocalization",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yokeap/xbeelocalization.git"
+  },
+  "author": "S.Sukprasertchai",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yokeap/xbeelocalization/issues"
+  },
+  "homepage": "https://github.com/yokeap/xbeelocalization#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "promise": "^8.0.1",
+    "xbee-api": "^0.6.0"
+  }
+}
