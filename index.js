@@ -2,14 +2,16 @@ var SerialPort = require('serialport');
 var xbee_api = require('xbee-api');
 var C = xbee_api.constants;
 
-var flag = false;
+var flagA = false,
+    flagB = false,
+    flagC = false;
 
 var xbeeAPI = new xbee_api.XBeeAPI({
   api_mode: 1
 });
 
 var serialport = new SerialPort("/dev/ttyUSB0", {
-  baudRate: 9600,
+  baudRate: 115200,
 });
 
 var frame_obj = { // AT Request to be sent
@@ -31,11 +33,18 @@ serialport.on("open", function() {
 xbeeAPI.parser.on("data", function(frame) {
   var data = JSON.parse(JSON.stringify(frame));
   if(data.type == 144){
-    xbeeAPI.builder.write(frame_obj);
+    var dataNodeName = JSON.parse(JSON.stringify(data.data));
+    if(dataNodeName.data[0] == 65) {
+      flagA = true;
+      xbeeAPI.builder.write(frame_obj);
+    }
   }
   if(data.type == 136){
-     var dataDB = JSON.parse(JSON.stringify(frame.commandData));
-      console.log(">>" , dataDB.data[0]*-1);
+    if(flagA){
+      var dataRSSI = JSON.parse(JSON.stringify(frame.commandData));
+       console.log("Node A >>" , dataRSSI.data[0]*-1);
+       flagA = false;
+    }
   }
 
   // if(data.)
