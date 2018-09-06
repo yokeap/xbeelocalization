@@ -19,6 +19,8 @@
   "dependencies": {
     "express": "^4.16.3",
     "promise": "^8.0.1",
+    "serialport": "^7.0.2",
+    "socket.io": "^2.1.1",
     "xbee-api": "^0.6.0"
   }
 }

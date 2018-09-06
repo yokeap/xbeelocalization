@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Xbee localization</title>
+    <style>
+      div{
+        width: 50%;
+        margin: 0 auto;
+      }
+      h2{
+        font-family: Helvetica;
+      }
+      p{
+        font-family: Helvetica;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2 align="center">Localization based on RSSI</h2>
+    <p align="center">powered by S. Sukprasertchai </p>
+    <div><canvas id="mychart" width="700" height="450"></canvas></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./src/Chart.min.js"></script>
+    <script src="./src/moment.js"></script>
+    <script src="./src/jquery.min.js"></script>
+
+    <script>
+    var socket  = io.connect();
+    var chart_canvas = document.getElementById('mychart').getContext('2d');
+    var dataSet = [12, 19, 20];
+
+    drawchart(dataSet);
+
+    socket.on('anchorA.data', function(data){
+      console.log(data);
+      dataSet[0] = data;
+      chartupdate(dataSet);
+    });
+
+    socket.on('anchorB.data', function(data){
+      console.log('B ' + data);
+      dataSet[1] = data;
+      chartupdate(dataSet);
+    });
+
+    socket.on('anchorC.data', function(data){
+      console.log(data);
+      dataSet[2] = data;
+      chartupdate(dataSet);
+    });
+
+    function drawchart(_dataset,){
+    chart = new Chart(chart_canvas, {
+    type: 'bar',
+    data: {
+        labels: ["anchor A", "anchor B", "anchor C"],
+        datasets: [{
+            label: 'RSSI',
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)'
+            ],
+            borderWidth: 1,
+            data:  _dataset
+        }]
+    },
+    options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+    chart.options.scales.yAxes[0].ticks.min = 0;
+    chart.options.scales.yAxes[0].ticks.max = 120;
+  }
+
+  function chartupdate(_dataSet){
+    chart.data.datasets[0].data = _dataSet;
+    chart.update();
+  }
+
+    </script>
+
+  </body>
+</html>
